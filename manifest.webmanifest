@@ -1,0 +1,17 @@
+{
+  "name": "Mi Contabilidad Personal",
+  "short_name": "Mi Contabilidad",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f4f6fa",
+  "theme_color": "#172554",
+  "description": "Contabilidad personal privada y sin conexión.",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

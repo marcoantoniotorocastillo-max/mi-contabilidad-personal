@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#172554">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Mi Contabilidad">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="description" content="Contabilidad personal privada y sin conexión.">
+  <title>Mi Contabilidad</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><div class="brand-mark">MC</div><div><strong>Mi Contabilidad</strong><small>Control financiero personal</small></div></div>
+    <div class="top-actions"><span id="connection" class="status">● Preparando…</span><button id="exportBtn" class="button secondary">Respaldar datos</button><label class="button secondary file-button">Restaurar<input id="importFile" type="file" accept="application/json"></label></div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar">
+      <button class="nav active" data-view="dashboard">▦ <span>Resumen</span></button>
+      <button class="nav" data-view="movement">＋ <span>Nuevo movimiento</span></button>
+      <button class="nav" data-view="journal">▤ <span>Libro diario</span></button>
+      <button class="nav" data-view="accounts">◫ <span>Plan de cuentas</span></button>
+      <button class="nav" data-view="reports">▥ <span>Informes</span></button>
+      <div class="side-note"><strong>Privacidad</strong><p>Los datos se guardan en este dispositivo. Exporta respaldos periódicamente.</p></div>
+    </aside>
+    <main class="main">
+      <section id="dashboard" class="view active">
+        <div class="page-heading"><div><p class="eyebrow">PANEL PERSONAL</p><h1>Resumen financiero</h1><p class="muted">Una visión general de tus movimientos registrados.</p></div><button class="button primary" data-go="movement">＋ Registrar movimiento</button></div>
+        <div class="cards">
+          <article class="metric"><span>Ingresos registrados</span><strong id="incomeTotal">$0</strong><small>Acumulado histórico</small></article>
+          <article class="metric"><span>Gastos registrados</span><strong id="expenseTotal">$0</strong><small>Acumulado histórico</small></article>
+          <article class="metric"><span>Resultado neto</span><strong id="netTotal">$0</strong><small>Ingresos menos gastos</small></article>
+          <article class="metric"><span>Movimientos</span><strong id="movementCount">0</strong><small>Asientos contabilizados</small></article>
+        </div>
+        <div class="panel"><div class="panel-heading"><div><h2>Movimientos recientes</h2><p class="muted">Últimos registros ingresados</p></div><button class="text-button" data-go="journal">Ver libro diario →</button></div><div id="recentList" class="table-wrap"><p class="empty">Todavía no hay movimientos. Registra tu primer ingreso o gasto.</p></div></div>
+        <div class="notice"><strong>Cómo funciona:</strong> cada ingreso o gasto crea automáticamente un asiento de partida doble. El total del Debe siempre debe coincidir con el Haber.</div>
+      </section>
+
+      <section id="movement" class="view">
+        <div class="page-heading"><div><p class="eyebrow">REGISTRO</p><h1>Nuevo movimiento</h1><p class="muted">Registra ingresos o gastos personales.</p></div></div>
+        <form id="movementForm" class="panel form-panel">
+          <div class="form-grid">
+            <label>Tipo de movimiento<select id="movementType" required><option value="income">Ingreso</option><option value="expense">Gasto</option></select></label>
+            <label>Fecha<input id="movementDate" type="date" required></label>
+            <label class="wide">Descripción<input id="description" maxlength="120" placeholder="Ej. Sueldo de noviembre, supermercado…" required></label>
+            <label>Monto en pesos chilenos<input id="amount" type="number" min="1" step="1" placeholder="Ej. 850000" required></label>
+            <label>Cuenta donde entra / desde donde sale<select id="cashAccount" required><option value="1101">Efectivo</option><option value="1102">Cuenta bancaria</option></select></label>
+            <label class="wide">Categoría<select id="category" required></select></label>
+            <label class="wide">Nota (opcional)<textarea id="note" rows="2" maxlength="500" placeholder="Detalle adicional…"></textarea></label>
+          </div>
+          <div class="form-footer"><p class="muted">Se generará un asiento contable balanceado automáticamente.</p><button class="button primary" type="submit">Guardar movimiento</button></div>
+          <p id="formMessage" class="form-message" role="status"></p>
+        </form>
+      </section>
+
+      <section id="journal" class="view">
+        <div class="page-heading"><div><p class="eyebrow">CONTABILIDAD</p><h1>Libro diario</h1><p class="muted">Asientos registrados con sus movimientos Debe y Haber.</p></div></div>
+        <div class="panel"><div id="journalList" class="table-wrap"><p class="empty">No hay asientos registrados.</p></div></div>
+      </section>
+
+      <section id="accounts" class="view">
+        <div class="page-heading"><div><p class="eyebrow">CONFIGURACIÓN CONTABLE</p><h1>Plan de cuentas</h1><p class="muted">Estructura inicial para administrar tus finanzas personales.</p></div></div>
+        <div class="panel"><div id="accountList" class="table-wrap"></div></div>
+        <div class="notice">El plan de cuentas inicial es orientativo. Antes de usarlo para reportes formales, revisaremos y ajustaremos las cuentas a tu realidad financiera.</div>
+      </section>
+
+      <section id="reports" class="view">
+        <div class="page-heading"><div><p class="eyebrow">ANÁLISIS</p><h1>Informes contables</h1><p class="muted">Balance de comprobación y resultado acumulado.</p></div></div>
+        <div class="panel"><div class="panel-heading"><div><h2>Balance de comprobación</h2><p class="muted">Saldos por cuenta calculados desde los asientos.</p></div></div><div id="trialBalance" class="table-wrap"></div></div>
+      </section>
+    </main>
+  </div>
+  <footer>Mi Contabilidad · Versión 0.1 · Aplicación local</footer>
+  <script src="db.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

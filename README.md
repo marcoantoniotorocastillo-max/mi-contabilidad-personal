@@ -1,54 +1,23 @@
-# Mi Contabilidad Personal — versión 0.1
+# Mi Contabilidad Personal — versión 0.2
 
-Aplicación web progresiva (PWA) inicial para registrar ingresos y gastos personales con asientos automáticos de partida doble. Los datos se almacenan localmente en IndexedDB.
+PWA personal offline con IndexedDB local.
 
-## Requisitos
-- Un navegador moderno (Chrome, Edge, Firefox o Safari).
-- Para ejecutar localmente, Python 3 instalado (o cualquier servidor HTTP local).
-- No requiere cuenta, base de datos en la nube ni conexión permanente.
+## Incluye
+- Ingresos y gastos con partida doble.
+- Transferencias entre cuentas de activo.
+- Préstamos recibidos.
+- Compras con tarjeta de crédito.
+- Pagos de deuda registrados como amortización de capital.
+- Saldos iniciales de activos contra patrimonio inicial.
+- Creación de cuentas de activo y pasivo.
+- Libro diario, balance de comprobación y resumen de activos/pasivos.
+- Respaldo y restauración JSON.
 
-## Ejecutar en Pop!_OS / Linux
-1. Descomprime el proyecto.
-2. Abre una terminal dentro de la carpeta `mi_contabilidad_personal`.
-3. Ejecuta:
+## Actualización
+Sube los archivos individuales de esta carpeta al repositorio GitHub reemplazando los archivos de igual nombre. Confirma los cambios en la rama main. El nuevo service worker usa caché `mi-contabilidad-v02`; abre la web con internet y recárgala para obtener la nueva versión.
 
-   `python3 -m http.server 8000`
-
-4. Abre `http://localhost:8000` en el navegador.
-
-No abras `index.html` directamente como archivo: el modo PWA y el almacenamiento se comportan mejor bajo `localhost` o HTTPS.
-
-## Instalar en el dispositivo
-- **iPhone:** publica primero la carpeta en una dirección HTTPS. Abre esa dirección en Safari > Compartir > Añadir a pantalla de inicio. Se añadieron metadatos y un icono específico para iOS.
-- **Android:** publica primero la carpeta en una dirección HTTPS. Abre esa dirección en Chrome > menú > Instalar aplicación / Añadir a pantalla de inicio.
-- En computador: abre el sitio local y usa la opción de instalar aplicación del navegador si está disponible.
-- En iPhone: para instalar una PWA se necesita publicar temporalmente en un alojamiento HTTPS o usar un servidor HTTPS accesible; abre el enlace en Safari > Compartir > Añadir a pantalla de inicio.
-- En Android: menú del navegador > Instalar aplicación / Añadir a pantalla de inicio.
-
-## Qué incluye
-- Panel de ingresos, gastos, resultado y cantidad de movimientos.
-- Registro de ingreso o gasto.
-- Asientos automáticos balanceados (Debe = Haber).
-- Plan de cuentas inicial.
-- Libro diario.
-- Balance de comprobación.
-- Exportación e importación de respaldo JSON.
-- Caché offline mediante Service Worker.
-
-## Estructura
-- `index.html`: estructura de pantallas.
-- `styles.css`: diseño adaptable a móvil y computador.
-- `db.js`: IndexedDB, plan de cuentas y respaldo.
-- `app.js`: lógica, cálculos y navegación.
-- `manifest.webmanifest`: configuración instalable.
-- `sw.js`: caché para funcionamiento sin conexión.
-- `icon.svg`: icono.
-
-## Importante
-Esta versión es un prototipo inicial de contabilidad personal, no un sistema tributario certificado ni un reemplazo de asesoría contable. Aún no incluye conciliación bancaria, presupuestos, cuentas por cobrar/pagar, cierre de períodos, depreciaciones, ni estados financieros completos. Antes de registrar información real importante, prueba con datos ficticios y descarga un respaldo.
-
-## Mantenimiento
-- Antes de actualizar, exporta un respaldo JSON.
-- No cambies `DB_NAME` ni `DB_VERSION` sin planificar una migración.
-- Al cambiar archivos, incrementa el nombre de caché en `sw.js` (por ejemplo `mi-contabilidad-v02`) para que los dispositivos descarguen la versión nueva.
-- Mantén al menos dos copias de respaldo en ubicaciones distintas.
+## Consideraciones
+- Registra el saldo inicial de cada cuenta de activo una sola vez.
+- Para tarjetas, registra la compra como gasto con tarjeta y luego registra el pago de capital como pago de deuda. Los intereses deben registrarse como gasto por separado; el formulario de amortización actual solo registra capital.
+- Los datos quedan almacenados localmente en el dispositivo y no se sincronizan automáticamente con otros dispositivos.
+- Esta aplicación es una herramienta personal de control y no sustituye un sistema tributario certificado ni asesoría contable.
